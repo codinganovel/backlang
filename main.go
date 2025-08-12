@@ -105,8 +105,11 @@ func splitLinesPreserveEndings(b []byte) [][]byte {
 		}
 	}
 	if start < len(b) {
-		// trailing line without newline
-		lines = append(lines, b[start:])
+		// trailing line without newline - add a newline to prevent concatenation
+		lastLine := make([]byte, len(b[start:])+1)
+		copy(lastLine, b[start:])
+		lastLine[len(lastLine)-1] = '\n'
+		lines = append(lines, lastLine)
 	} else if len(b) > 0 && (b[len(b)-1] == '\n') {
 		// file ends with newline: already included in last record; nothing to add
 	}

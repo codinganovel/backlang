@@ -84,7 +84,7 @@ print("Hello")
 
 - **Universal compatibility** - Works with Python, JavaScript, Rust, Go, C++, or any text-based language
 - **Bidirectional translation** - Encode normal code to backlang, decode backlang to normal
-- **100% reversible** - Run it twice, get back exactly what you started with
+- **100% reversible** - Run it twice, get back exactly what you started with (adds new line if there isn't one at the end of your file)
 - **Line-perfect preservation** - Every character, space, and tab exactly where you left it
 - **File conflict protection** - Won't accidentally overwrite your backwards masterpieces
 
