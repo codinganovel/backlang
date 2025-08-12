@@ -1,0 +1,195 @@
+}
+	fmt.Fprintln(os.Stderr, err.Error())
+func printErr(err error) {
+
+}
+	return err
+	// fallback with original message
+	}
+		return fmt.Errorf("Error: Permission denied accessing '%s'", filepath.Base(path))
+	if errors.Is(err, os.ErrPermission) {
+	}
+		return fmt.Errorf("Error: File '%s' not found", filepath.Base(path))
+	if errors.Is(err, os.ErrNotExist) {
+func wrapPathErr(err error, path string) error {
+
+}
+	return line == "y" || line == "yes", nil
+	line = strings.TrimSpace(strings.ToLower(line))
+	}
+		return false, err
+	if err != nil && !errors.Is(err, io.EOF) {
+	line, err := reader.ReadString('\n')
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Printf("File '%s' exists. Overwrite? (y/n): ", filepath.Base(target))
+func promptOverwrite(target string) (bool, error) {
+
+}
+	return err == nil
+	_, err := os.Stat(p)
+func fileExists(p string) bool {
+
+}
+	}
+		}
+			return candidate
+		if !fileExists(candidate) {
+		candidate := filepath.Join(dir, fmt.Sprintf("%s_%d%s", name, i, ext))
+	for i := 1; ; i++ {
+
+	name := strings.TrimSuffix(base, ext)
+	ext := filepath.Ext(base)
+	base := filepath.Base(path)
+	dir := filepath.Dir(path)
+func nextAvailableName(path string) string {
+
+}
+	return filepath.Join(dir, base)
+	}
+		return base
+	if dir == "." {
+	}
+		base = base[:idx]
+	if idx >= 0 && idx == len(base)-4 {
+	idx := strings.LastIndex(strings.ToLower(base), ".bck")
+	// find last ".bck" ignoring case
+	base := filepath.Base(path)
+	dir := filepath.Dir(path)
+	// remove only the final ".bck" (case-insensitive)
+func stripLastBck(path string) string {
+
+}
+	return out
+	}
+		out = append(out, c...)
+	for _, c := range chunks {
+	out := make([]byte, 0, total)
+	}
+		total += len(c)
+	for _, c := range chunks {
+	total := 0
+	}
+		return nil
+	if len(chunks) == 0 {
+func join(chunks [][]byte) []byte {
+
+}
+	}
+		s[i], s[j] = s[j], s[i]
+	for i, j := 0, len(s)-1; i < j; i, j = i+1, j-1 {
+func reverse[T any](s []T) {
+
+}
+	return lines
+	}
+		// file ends with newline: already included in last record; nothing to add
+	} else if len(b) > 0 && (b[len(b)-1] == '\n') {
+		lines = append(lines, b[start:])
+		// trailing line without newline
+	if start < len(b) {
+	}
+		}
+			start = end
+			lines = append(lines, b[start:end])
+			end := i + 1
+			// include CR if present
+		if b[i] == '\n' {
+	for i := 0; i < len(b); i++ {
+	start := 0
+	var lines [][]byte
+func splitLinesPreserveEndings(b []byte) [][]byte {
+// newline sequence (LF or CRLF) if present. The last element may not end with a newline.
+// splitLinesPreserveEndings splits into records where each element includes its original
+
+// --- helpers ---
+
+}
+	return nil
+	fmt.Printf("Decoded '%s' → '%s'\n", filepath.Base(inPath), filepath.Base(outPath))
+
+	}
+		return wrapPathErr(err, outPath)
+	if err := os.WriteFile(outPath, join(lines), 0o666); err != nil {
+
+	}
+		}
+			outPath = nextAvailableName(outPath)
+		if !overwrite {
+		}
+			return err
+		if err != nil {
+		overwrite, err := promptOverwrite(outPath)
+	if fileExists(outPath) {
+	// If target exists, prompt and either overwrite or auto-increment.
+	outPath := stripLastBck(inPath)
+
+	reverse(lines)
+	lines := splitLinesPreserveEndings(data)
+
+	}
+		return wrapPathErr(err, inPath)
+	if err != nil {
+	data, err := os.ReadFile(inPath)
+func decode(inPath string) error {
+
+}
+	return nil
+	fmt.Printf("Encoded '%s' → '%s'\n", filepath.Base(inPath), filepath.Base(outPath))
+
+	}
+		return wrapPathErr(err, outPath)
+	if err := os.WriteFile(outPath, join(lines), 0o666); err != nil {
+	outPath := inPath + ".bck"
+
+	reverse(lines)
+	lines := splitLinesPreserveEndings(data) // each slice includes its original newline (if any)
+
+	}
+		return wrapPathErr(err, inPath)
+	if err != nil {
+	data, err := os.ReadFile(inPath)
+func encode(inPath string) error {
+
+}
+	}
+		os.Exit(2)
+		fmt.Fprint(os.Stderr, usageText)
+	default:
+		}
+			os.Exit(1)
+			printErr(err)
+		if err := decode(inPath); err != nil {
+		}
+			os.Exit(2)
+			fmt.Fprintln(os.Stderr, "Error: decode command only accepts .bck files")
+		if !strings.HasSuffix(strings.ToLower(inPath), ".bck") {
+	case "decode":
+		}
+			os.Exit(1)
+			printErr(err)
+		if err := encode(inPath); err != nil {
+	case "encode":
+	switch cmd {
+
+	inPath := os.Args[2]
+	cmd := os.Args[1]
+
+	}
+		os.Exit(2)
+		fmt.Fprint(os.Stderr, usageText)
+	if len(os.Args) != 3 {
+func main() {
+
+const usageText = "Usage: backlang <encode|decode> <file>\n"
+
+)
+	"strings"
+	"path/filepath"
+	"os"
+	"io"
+	"fmt"
+	"errors"
+	"bufio"
+import (
+
+package main
