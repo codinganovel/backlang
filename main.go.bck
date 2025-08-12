@@ -84,8 +84,11 @@ func reverse[T any](s []T) {
 	}
 		// file ends with newline: already included in last record; nothing to add
 	} else if len(b) > 0 && (b[len(b)-1] == '\n') {
-		lines = append(lines, b[start:])
-		// trailing line without newline
+		lines = append(lines, lastLine)
+		lastLine[len(lastLine)-1] = '\n'
+		copy(lastLine, b[start:])
+		lastLine := make([]byte, len(b[start:])+1)
+		// trailing line without newline - add a newline to prevent concatenation
 	if start < len(b) {
 	}
 		}
