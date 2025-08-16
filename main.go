@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-const usageText = "Usage: backlang <encode|decode> <file>\n"
+const usageText = "Usage: backlang <encode|decode|run> <file>\n"
 
 func main() {
 	if len(os.Args) != 3 {
@@ -33,6 +33,11 @@ func main() {
 			os.Exit(2)
 		}
 		if err := decode(inPath); err != nil {
+			printErr(err)
+			os.Exit(1)
+		}
+	case "run":
+		if err := run(inPath); err != nil {
 			printErr(err)
 			os.Exit(1)
 		}
