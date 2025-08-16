@@ -28,14 +28,20 @@ func getSupportedLanguages() []Language {
 			Command:    "python3",
 			Args:       []string{}, // Will append filename
 		},
-		// Future languages can be added here
-		// {
-		//     Name:       "JavaScript",
-		//     Extensions: []string{".js"},
-		//     Shebangs:   []string{"#!/usr/bin/env node", "#!/usr/bin/node"},
-		//     Command:    "node",
-		//     Args:       []string{},
-		// },
+		{
+			Name:       "JavaScript",
+			Extensions: []string{".js"},
+			Shebangs:   []string{"#!/usr/bin/env node", "#!/usr/bin/node"},
+			Command:    "node",
+			Args:       []string{},
+		},
+		{
+			Name:       "Bash",
+			Extensions: []string{".sh", ".bash"},
+			Shebangs:   []string{"#!/bin/bash", "#!/usr/bin/env bash", "#!/bin/sh", "#!/usr/bin/env sh"},
+			Command:    "bash",
+			Args:       []string{},
+		},
 	}
 }
 

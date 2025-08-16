@@ -54,6 +54,15 @@ backlang decode hello.py.bck
 # Creates hello.py - back to the boring, sensible version
 ```
 
+### Run: Because Even Backwards Code Should Execute
+```bash
+# For the truly committed - decode AND execute in one command
+backlang run hello.py.bck
+
+# Automatically detects it's Python, decodes, and runs it
+# Your backwards code is now actually executable. What have we done?
+```
+
 ---
 
 ## 💡 Example: Python → backlang → Python
@@ -75,8 +84,18 @@ print("Hello")
 **The workflow:**
 1. Write your program backwards in any language
 2. Save it as a `.bck` file 
-3. Use `backlang decode` to get runnable code
+3. Use `backlang decode` to get runnable code (or `backlang run` to decode and execute automatically)
 4. Impress your colleagues with your dedication to unnecessary complexity
+
+**What happens when you run it:**
+```bash
+$ backlang run hello.py.bck
+Decoded 'hello.py.bck' → 'hello_1.py'
+Detected Python, running with python3...
+Hello
+World
+!
+```
 
 ---
 
@@ -84,6 +103,7 @@ print("Hello")
 
 - **Universal compatibility** - Works with Python, JavaScript, Rust, Go, C++, or any text-based language
 - **Bidirectional translation** - Encode normal code to backlang, decode backlang to normal
+- **Direct execution** - Decode and run backwards code in one command (Python, JavaScript, Bash supported)
 - **100% reversible** - Perfect round-trip preservation of your original file, including trailing newline handling
 - **Line-perfect preservation** - Every character, space, and tab exactly where you left it
 - **File conflict protection** - Won't accidentally overwrite your backwards masterpieces
@@ -97,7 +117,7 @@ print("Hello")
 # Make your JavaScript even more confusing
 backlang encode app.js
 # Edit app.js.bck (writing backwards, obviously)
-backlang decode app.js.bck
+backlang run app.js.bck  # Decode and execute in one go
 ```
 
 ### For the Code Golf Masochist  
@@ -121,6 +141,7 @@ backlang encode main.rs
 |---------|--------------|-------------------|
 | `backlang encode <file>` | Converts normal code to backlang | Any text file |
 | `backlang decode <file>` | Converts backlang back to normal | Must be a `.bck` file |
+| `backlang run <file>` | Decodes and executes backwards code | Must be a `.bck` file (Python, JS, Bash) |
 
 ### Advanced Workflows
 
@@ -153,6 +174,8 @@ Also, it's kind of fun in a weird way.
 - **Algorithm:** Simple line reversal (first line becomes last, last becomes first)
 - **File format:** `.bck` files are plain text, editable in any editor
 - **Special marker `##BCKL.NNL##`:** Because your text files are special snowflakes that don't need trailing newlines. This marker appears at the top of `.bck` files when the original was too cool for standard line endings. Don't worry, we'll preserve your artisanal, hand-crafted lack of newlines.
+- **Language detection:** Automatically detects Python, JavaScript, and Bash via shebangs (`#!/usr/bin/env python3`) or file extensions (`.py`, `.js`, `.sh`)
+- **Auto-execution:** Decodes `.bck` files to temporary numbered files, then routes to the appropriate interpreter
 - **Encoding preservation:** Maintains original file encoding (UTF-8, ASCII, etc.)
 - **Error handling:** Graceful failures with helpful error messages
 - **Cross-platform:** Works on Linux, macOS, Windows
@@ -166,6 +189,7 @@ Also, it's kind of fun in a weird way.
 - **Your IDE's syntax highlighting will have no idea what's happening**
 - **Code reviews will be... interesting**
 - **Debugging backwards code is exactly as fun as it sounds**
+- **The `run` command will actually execute your backwards code** - because apparently we've made this thing too convenient
 
 ---
 
