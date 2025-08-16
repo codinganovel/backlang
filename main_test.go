@@ -81,12 +81,12 @@ func TestEncodeDecode(t *testing.T) {
 	tests := []struct {
 		name string
 		content string
-		expectNewline bool
 	}{
-		{"with newline", "line1\nline2\nline3\n", false},
-		{"no newline", "line1\nline2\nline3", true},
-		{"single line", "hello world", true},
-		{"empty", "", false},
+		{"with newline", "line1\nline2\nline3\n"},
+		{"no newline", "line1\nline2\nline3"},
+		{"single line with newline", "hello world\n"},
+		{"single line no newline", "hello world"},
+		{"empty", ""},
 	}
 
 	for _, tt := range tests {
@@ -102,10 +102,18 @@ func TestEncodeDecode(t *testing.T) {
 				t.Fatalf("encode failed: %v", err)
 			}
 
-			// Check .bck file exists
+			// Check .bck file exists and contains marker if needed
 			bckFile := testFile + ".bck"
-			if _, err := os.Stat(bckFile); os.IsNotExist(err) {
-				t.Fatal("encoded .bck file not created")
+			bckContent, err := os.ReadFile(bckFile)
+			if err != nil {
+				t.Fatal("failed to read .bck file")
+			}
+
+			// Check marker presence
+			hasMarker := strings.HasPrefix(string(bckContent), "##BCKL.NNL##\n")
+			shouldHaveMarker := len(tt.content) > 0 && !strings.HasSuffix(tt.content, "\n")
+			if hasMarker != shouldHaveMarker {
+				t.Errorf("marker presence mismatch: has=%v, should=%v", hasMarker, shouldHaveMarker)
 			}
 
 			// Decode (to different name to avoid overwrite prompt)
@@ -120,15 +128,10 @@ func TestEncodeDecode(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			// Check result
-			expected := tt.content
-			if tt.expectNewline && !strings.HasSuffix(expected, "\n") {
-				expected += "\n"
-			}
-
-			if string(decoded) != expected {
-				t.Errorf("encode/decode cycle:\noriginal: %q\ndecoded:  %q\nexpected: %q", 
-					tt.content, string(decoded), expected)
+			// With the marker feature, content should round-trip perfectly
+			if string(decoded) != tt.content {
+				t.Errorf("encode/decode cycle failed:\noriginal: %q\ndecoded:  %q", 
+					tt.content, string(decoded))
 			}
 		})
 	}

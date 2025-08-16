@@ -84,7 +84,7 @@ print("Hello")
 
 - **Universal compatibility** - Works with Python, JavaScript, Rust, Go, C++, or any text-based language
 - **Bidirectional translation** - Encode normal code to backlang, decode backlang to normal
-- **100% reversible** - Run it twice, get back exactly what you started with (adds new line if there isn't one at the end of your file)
+- **100% reversible** - Perfect round-trip preservation of your original file, including trailing newline handling
 - **Line-perfect preservation** - Every character, space, and tab exactly where you left it
 - **File conflict protection** - Won't accidentally overwrite your backwards masterpieces
 
@@ -152,6 +152,7 @@ Also, it's kind of fun in a weird way.
 
 - **Algorithm:** Simple line reversal (first line becomes last, last becomes first)
 - **File format:** `.bck` files are plain text, editable in any editor
+- **Special marker `##BCKL.NNL##`:** Because your text files are special snowflakes that don't need trailing newlines. This marker appears at the top of `.bck` files when the original was too cool for standard line endings. Don't worry, we'll preserve your artisanal, hand-crafted lack of newlines.
 - **Encoding preservation:** Maintains original file encoding (UTF-8, ASCII, etc.)
 - **Error handling:** Graceful failures with helpful error messages
 - **Cross-platform:** Works on Linux, macOS, Windows

@@ -48,8 +48,17 @@ func encode(inPath string) error {
 		return wrapPathErr(err, inPath)
 	}
 
+	// Check if original file lacks trailing newline
+	hasTrailingNewline := len(data) > 0 && (data[len(data)-1] == '\n')
+	
 	lines := splitLinesPreserveEndings(data) // each slice includes its original newline (if any)
 	reverse(lines)
+	
+	// Add marker if original had no trailing newline
+	if !hasTrailingNewline && len(data) > 0 {
+		marker := []byte("##BCKL.NNL##\n")
+		lines = append([][]byte{marker}, lines...)
+	}
 
 	outPath := inPath + ".bck"
 	if err := os.WriteFile(outPath, join(lines), 0o666); err != nil {
@@ -67,7 +76,23 @@ func decode(inPath string) error {
 	}
 
 	lines := splitLinesPreserveEndings(data)
+	
+	// Check for marker at the beginning
+	hasMarker := false
+	if len(lines) > 0 && string(lines[0]) == "##BCKL.NNL##\n" {
+		hasMarker = true
+		lines = lines[1:] // Remove marker
+	}
+	
 	reverse(lines)
+	
+	// If marker was present, remove the trailing newline we added during encode
+	if hasMarker && len(lines) > 0 {
+		lastLine := lines[len(lines)-1]
+		if len(lastLine) > 0 && lastLine[len(lastLine)-1] == '\n' {
+			lines[len(lines)-1] = lastLine[:len(lastLine)-1]
+		}
+	}
 
 	outPath := stripLastBck(inPath)
 	// If target exists, prompt and either overwrite or auto-increment.
